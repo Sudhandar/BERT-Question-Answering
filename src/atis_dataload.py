@@ -1,12 +1,10 @@
 import numpy as np
 import os
-#differnent on google drive when using google colab
-print(os.listdir("./input/atis"))
 import pickle
-#differnent on google drive when using google colab
-DATA_DIR="./input/atis"
+import pandas as pd
+DATA_DIR="./input"
 
-def load_ds(fname=os.path.join(DATA_DIR,'/atis.train.pkl'), verbose=True):
+def load_ds(fname=os.path.join(DATA_DIR,'/*.pkl'), verbose=True):
     with open(fname, 'rb') as stream:
         ds,dicts = pickle.load(stream)
     if verbose:
@@ -66,12 +64,23 @@ def load_atis(filename, add_start_end_token=False, verbose=True):
     query_data = np.array(query_data)
     intent_data = np.array(intent_data)
     slot_data = np.array(slot_data)
-    intent_data_label = np.array(intent).flatten()
-    return t2i, s2i, in2i, i2t, i2s, i2in, input_tensor, target_tensor, query_data, intent_data, intent_data_label, slot_data
+#    intent_data_label = np.array(intent).flatten()
+    query_data = pd.DataFrame(query_data, columns = ['query'])
+    intent_data = pd.DataFrame(intent_data, columns = ['intent'])
+    df = pd.merge(query_data, intent_data, left_index = True, right_index = True, how='inner')
+    df['query'] = df['query'].str.strip()
+
+    return df
 
 # load ATIS training dataset
-t2i_train, s2i_train, in2i_train, i2t_train, i2s_train, i2in_train,input_tensor_train, target_tensor_train,query_data_train, intent_data_train, intent_data_label_train, slot_data_train = load_atis('atis.train.pkl')
+train_df = load_atis('atis.train.pkl')
 
 # load ATIS testing dataset
-t2i_test, s2i_test, in2i_test, i2t_test, i2s_test, i2in_test, input_tensor_test, target_tensor_test, query_data_test, intent_data_test, intent_data_label_test, slot_data_test = load_atis('atis.test.pkl')
+test_df = load_atis('atis.test.pkl')
   
+train_df.to_csv('./input/atis_train.csv',index=False)
+test_df.to_csv('./input/atis_test.csv', index=False)
+
+
+
+
