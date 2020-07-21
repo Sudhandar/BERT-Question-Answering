@@ -3,7 +3,6 @@ import os
 import pickle
 import pandas as pd
 DATA_DIR="./input"
-
 def load_ds(fname=os.path.join(DATA_DIR,'/*.pkl'), verbose=True):
     with open(fname, 'rb') as stream:
         ds,dicts = pickle.load(stream)
@@ -14,9 +13,6 @@ def load_ds(fname=os.path.join(DATA_DIR,'/*.pkl'), verbose=True):
       print('   slot count: {:4d}'.format(len(dicts['slot_ids'])))
       print(' intent count: {:4d}'.format(len(dicts['intent_ids'])))
     return ds,dicts
-
-train_ds, dicts = load_ds(os.path.join(DATA_DIR,'atis.train.pkl'))
-test_ds, dicts  = load_ds(os.path.join(DATA_DIR,'atis.test.pkl'))
 
 def load_atis(filename, add_start_end_token=False, verbose=True):
     train_ds, dicts = load_ds(os.path.join(DATA_DIR,filename), verbose)
@@ -69,17 +65,15 @@ def load_atis(filename, add_start_end_token=False, verbose=True):
     intent_data = pd.DataFrame(intent_data, columns = ['intent'])
     df = pd.merge(query_data, intent_data, left_index = True, right_index = True, how='inner')
     df['query'] = df['query'].str.strip()
-
     return df
 
 # load ATIS training dataset
 train_df = load_atis('atis.train.pkl')
-
 # load ATIS testing dataset
 test_df = load_atis('atis.test.pkl')
-  
 train_df.to_csv('./input/atis_train.csv',index=False)
 test_df.to_csv('./input/atis_test.csv', index=False)
+
 
 
 
