@@ -66,13 +66,16 @@ def load_atis(filename, add_start_end_token=False, verbose=True):
     df = pd.merge(query_data, intent_data, left_index = True, right_index = True, how='inner')
     df['query'] = df['query'].str.strip()
     return df
+if __name__ == '__main__':
+    # load ATIS training dataset
+    train_df = load_atis('atis.train.pkl')
+    # load ATIS testing dataset
+    test_df = load_atis('atis.test.pkl')
+    df = train_df.append(test_df)
+    df.to_csv('./input/atis_dataset.csv',index =False)
+#    train_df.to_csv('./input/atis_train.csv',index=False)
+#    test_df.to_csv('./input/atis_test.csv', index=False)
 
-# load ATIS training dataset
-train_df = load_atis('atis.train.pkl')
-# load ATIS testing dataset
-test_df = load_atis('atis.test.pkl')
-train_df.to_csv('./input/atis_train.csv',index=False)
-test_df.to_csv('./input/atis_test.csv', index=False)
 
 
 
