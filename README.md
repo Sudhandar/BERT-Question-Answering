@@ -20,8 +20,8 @@ The following are few examples of query and intent,
 Query text: how much does dl 746 cost
 Intent label:  airfare
 
-Query text: what flights from milwaukee to san jose on wednesday on american airlines
-Intent label:  flight
+Query text: how much does it cost to rent a car in tacoma
+Intent label:  ground_fare
 ```
 ## Model
 
