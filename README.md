@@ -1,36 +1,45 @@
 # Intent-Classification-with-BERT
 
-BERT is an open source model released by Google. I used the pre trained BERT from [Hugging face Pytorch transformers](https://huggingface.co/transformers/). 
+A multiclass classifcation problem containing text data as input feature instead of multiple feature columns solved using a pretrained deep learning model, BERT from Google.
 
 ## Dataset
 
-The dataset used was ATIS ( Airline Travel Information System) and it a preprocessed version was downloaded from [here](https://www.kaggle.com/siddhadev/atis-dataset-from-ms-cntk.)
+The dataset used for this task is known as  ATIS ( Airline Travel Information System) and  the pickle files can be downloaded from [here](https://www.kaggle.com/siddhadev/atis-dataset-from-ms-cntk.)
 
-This data set contains 4978 train and 893 test spoken utterances (text) classified into one of *26 intents*.
+| Entity        		| Value         	|
+| ----------------------|:-----------------:|
+| No of rows    		| 5871				|
+| No of target classes  | 26      			|
+| Distribution 			| Skewed     		|
+| Cross-validation 		| Stratified K-fold |
+| Train-Test split 		| 85% - 15%     	|
+| Accuracy Metric 		| Weighted F1 Score |
 
 The following are few examples of query and intent,
-
 ```
-Query text: BOS how much does dl 746 cost EOS
+Query text: how much does dl 746 cost
 Intent label:  airfare
 
-Query text: BOS what flights from milwaukee to san jose on wednesday on american airlines EOS
+Query text: what flights from milwaukee to san jose on wednesday on american airlines
 Intent label:  flight
 ```
-
 ## Model
 
-The *pretrained BERT base uncased version* was used as the base and the **BERT for sequence classification** model was used where a single linear layer was added on top for classification. 
+*Bert for Sequence Classification* was used for this process. The tranformers library for huggingface provides the pretrained Bert model which was used in this project. The following are the model specifics,
+
+| Entity        		| Value         	|
+| ----------------------|:-----------------:|
+| Epochs   				| 10				|
+| Batch size			| 32      			|
+| Optimizer 			| Adam Optimizer    |
 
 ## Accuracy
 
-The final training loss and validation set accuracy are as follows,
+The final F1 socre on the test data is 0.98,
 
 ```
-Train loss: 0.01674700544348785
-Validation set Accuracy: 0.994140625
+F1 Score (weighted): 0.9854597408262985
 ```
+Using transfer learning, high accuracy can be achieved for normal day to day datasets which would otherwise be computationaly expensive and time consuming.
 
-The test set accuracy was 94.95%
 
-With the help of BERT, models with high accuracy can be built using transfer learning.
