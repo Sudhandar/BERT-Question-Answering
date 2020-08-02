@@ -2,9 +2,11 @@
 
 A multiclass classifcation problem containing text data as input feature instead of multiple feature columns solved using a pretrained deep learning model, BERT from Google.
 
+Link to the notebook : [Colab Notebook](https://github.com/Sudhandar/Intent-Classification-with-BERT/tree/master/notebooks)
+
 ## Dataset
 
-The dataset used for this task is known as  ATIS ( Airline Travel Information System) and  the pickle files can be downloaded from [here](https://www.kaggle.com/siddhadev/atis-dataset-from-ms-cntk.)
+The dataset used for this task is known as  ATIS ( Airline Travel Information System) and  the pickle files can be downloaded from [here](https://www.kaggle.com/siddhadev/atis-dataset-from-ms-cntk)
 
 | Entity        		| Value         	|
 | ----------------------|:-----------------:|
