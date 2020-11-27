@@ -2,13 +2,15 @@
 
 Link to view the notebook: [Github view](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/Question%20and%20Answering%20-%20BERT.ipynb)
 
-Fine tuning the BERT base model to build a question and answering model,trained and tested on the SQuAD dataset.
+Fine tuning the BERT base-cased model to build a question and answering model,trained and tested on the SQuAD dataset.
 
 ## About BERT
 
 BERT( Bidirectional Encoder Representations from Transforers) method of pre-training language representations. With the use of pre-trained BERT models we can utilize a pre-trained memory information of sentence structure, language and text grammar related memory of large corpus of millions, or billions, of annotated training examples that it has trained. BERT makes use of Transformer, an attention mechanism that learns contextual relations between words (or sub-words) in a text.The pre-trained model can then be fine-tuned on small-data NLP tasks like question answering and sentiment analysis, resulting in substantial improvements in accuracy compared to training on these datasets from scratch. The following is the structure of BERT,
 
 ![alt text](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/images/bert_structure.png)
+
+<p align="center"> [Image Source](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/blocks/bert-encoder)</p>
 
 ## SQUAD Dataset
 
@@ -94,4 +96,55 @@ There are several factors that impact our choice of the maximum sequence length 
 3. **GPU Memory** - The combination of `max_len` and `batch_size` need to fit within the memory limits of Google Colab's GPU. For a Tesla K80 (which has 12GB of RAM), with `batch_size = 16`, the maximum length that can be used (without running of memory) is about `max_len = 400`.
 
 Ultimately, a maximum sequence length of `384` is used to match the length chosen by the huggingface implementation.
+
+## Dataset Sampling and validation
+
+This dataset already has a train / test split, but the training dataset has been further divided to use 98% for training and 2% for *validation*. The validation set is used to detect over-fitting during the training process. A subset of 50000 samples are used for training.
+
+## Hyperparameters Used
+
+The model object handles the execution of a forward pass, and the calculation of gradients during training.The actual updates to the model's weights, however, are performed by an Optimizer object.It is given as  a reference to the model's parameters, as well as set some of the training hyperparameters.
+
+For the purposes of fine-tuning, the BERT authors recommend choosing from the following values:
+
+* Batch size: 16, 32
+* Learning rate (Adam): 5e-5, 3e-5, 2e-5
+* Number of epochs: 2, 3, 4 ("learning rate scheduler")
+
+In order to make more efficient use of the GPU's parallel processing capabilities, a batch size of 16 is used. The learning rate used is 2e-5 and number of epochs is 4.
+
+## Training and Validation
+
+The training process has **12252** steps with each epoch contributing to 3063 batches. The dataset was trained for 4 hours on GPU. Both the training and validation loss kept on decresing in the subsequent epochs. The follwowing table shows the loss in each epochs,
+
+
+
+ The following is a graph comparing training and validation loss across all epochs,
+
+## Evaluation on test set
+
+The SQuAD test set follows the same json structure as the training set, however, there are 3 answers provided for every question. These are three human-provided answers, and they don't always agree. For example, for the question:
+
+```
+Where did Super Bowl 50 take place?
+```
+
+The annotators produced:
+```
+   {'answer_start': 403, 'text': 'Santa Clara, California'}
+   {'answer_start': 355, 'text': "Levi's Stadium"}
+   {'answer_start': 355, 'text': "Levi's Stadium in the San Francisco Bay Area at Santa Clara, California."}
+```   
+
+Since all three of these seem acceptable,BERT's prediction to all three correct answers are compared, and the highest F1 score that BERT gets among the three is considered.
+
+For the test samples, a 2-pass approach has been followed to tokenize the samples. 
+
+In the first pass,all the samples are tokenized **without any truncation or padding**, which allows us to correctly locate the answers, even if their token indices are greater than 384.
+
+In the second pass, the samples are tokenized and encoded , with padding and truncation.
+
+The test set contains 21140 samples.
+
+## Final Results
 
