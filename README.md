@@ -8,6 +8,7 @@ Fine tuning the BERT base model to build a question and answering model,trained 
 
 BERT( Bidirectional Encoder Representations from Transforers) method of pre-training language representations. With the use of pre-trained BERT models we can utilize a pre-trained memory information of sentence structure, language and text grammar related memory of large corpus of millions, or billions, of annotated training examples that it has trained. BERT makes use of Transformer, an attention mechanism that learns contextual relations between words (or sub-words) in a text.The pre-trained model can then be fine-tuned on small-data NLP tasks like question answering and sentiment analysis, resulting in substantial improvements in accuracy compared to training on these datasets from scratch. The following is the structure of BERT,
 
+![alt text](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/images/bert_structure.png)
 
 ## SQUAD Dataset
 
@@ -19,11 +20,13 @@ SQuAD 1.1 contains 100,000+ question-answer pairs on 500+ articles. The data is 
 * **question_text**: The question string
 * **context_text**: The context string
 * **answer_text**: The answer string
-
-`Title: University_of_Notre_Dame
+```
+Title: University_of_Notre_Dame
 ID: 5733caf74776f4190066124c
+
 ======== Question =========
 How many wins does the Notre Dame men's basketball team have?
+
 ======== Context =========
 The men's basketball team has over 1,600 wins, one of only 12 schools who have
 reached that mark, and have appeared in 28 NCAA tournaments. Former player
@@ -47,9 +50,10 @@ where the Fighting Irish lost on a missed buzzer-beater against then undefeated
 Kentucky. Led by NBA draft picks Jerian Grant and Pat Connaughton, the Fighting
 Irish beat the eventual national champion Duke Blue Devils twice during the
 season. The 32 wins were the most by the Fighting Irish team since 1908-09.
+
 ======== Answer =========
 over 1,600
-`
+```
 
 ## Sequence Length Distribution
 
@@ -62,12 +66,15 @@ Part of tokenizing and encoding text for BERT is choosing a **maximum sequence l
 Here are the minimum, maximum, and median sequence lengths.
 
 ```
-   Min length: 36 tokens
-   Max length: 882 tokens
+Min length: 36 tokens
+Max length: 882 tokens
 Median length: 163 tokens
 ```
 
 The distribution plot of the sequence lengths, 
+
+![alt text](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/images/sequence_length_distribution.png)
+
 
 Finally, the number of training samples which would be impacted, given a handful of different choices of `max_len`.
 
