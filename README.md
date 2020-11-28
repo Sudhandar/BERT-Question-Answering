@@ -110,7 +110,7 @@ There are several factors that impact our choice of the maximum sequence length 
 2. **Accuracy** - Truncating the samples to a shorter length will presumably hurt accuracy, due to the loss of information. 
 3. **GPU Memory** - The combination of `max_len` and `batch_size` need to fit within the memory limits of Google Colab's GPU. For a Tesla K80 (which has 12GB of RAM), with `batch_size = 16`, the maximum length that can be used (without running of memory) is about `max_len = 400`.
 
-Ultimately, a maximum sequence length of `384` is used to match the length chosen by the huggingface implementation.
+A maximum sequence length of `384` is used as suggested by the BERT authors.
 
 ## Hyperparameters Used
 
@@ -129,12 +129,10 @@ This dataset already has a train / test split, but the training dataset has been
 
 There are 7,105 training batches & 145 validation batches for 1 epoch.The dataset was trained for 3.5 hours on GPU.The follwowing table shows the loss in each epochs,
 
-|-------|---------------|-----------------|---------------------|---------------|-----------------|
 | Epoch | Training Loss | Validation Loss |	Validation Accuracy | Training Time	| Validation Time |				
 |-------|---------------|-----------------|---------------------|---------------|-----------------|
 |  1	|    1.23	    |      0.92	      |         0.72	    |     1:47:19	|      0:00:45    |
 |  2	|    0.70       |	   0.93	      |         0.73	    |     1:47:18	|      0:00:45    |
-|-------|---------------|-----------------|---------------------|---------------|-----------------|
 
 ## Evaluation on test set
 
