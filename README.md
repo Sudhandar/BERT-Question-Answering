@@ -10,7 +10,7 @@ BERT( Bidirectional Encoder Representations from Transforers) method of pre-trai
 
 ![alt text](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/images/bert_structure.png)
 
-<p align="center"> [Image Source](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/blocks/bert-encoder)</p>
+[Image Source](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/blocks/bert-encoder)
 
 ## SQUAD Dataset
 
