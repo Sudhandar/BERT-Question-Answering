@@ -2,6 +2,8 @@
 
 Link to view the notebook: [Github view](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/Question%20and%20Answering%20-%20BERT.ipynb)
 
+Link to the Colab Notebook: [Colab Notebook](https://colab.research.google.com/drive/1uYtqckEAp6DwweZGw4VxyU9rvEax-A5y?authuser=1#scrollTo=Ff-eSxYL6hZC)
+
 Fine tuning the BERT base-cased model to build a question and answering model,trained and tested on the SQuAD dataset.
 
 ## About BERT
@@ -57,6 +59,19 @@ season. The 32 wins were the most by the Fighting Irish team since 1908-09.
 over 1,600
 ```
 
+## Labelling the Answers
+
+**Replacing Answer with [MASK] Tokens**
+
+The strategy is to modify the context string and replace the answer with a "sentinel string"--a unique and easily identifiable sequence of tokens--before feeding the context string through the tokenizer. 
+
+* **Step 1**: Feed the **answer** string into the BERT tokenizer to determine the number of tokens it breaks into.
+* **Step 2**: In the context, replace the answer with a string made up of `[MASK]` tokens, matching the number of tokens in the answer. 
+* **Step 3**: Feed the modified text into the BERT tokenizer to tokenize and encode everything.
+* **Step 4**: Locate the `[MASK]` tokens in the encoded result. This is easy, since the `[MASK]` token has a specific ID and won't appear anywhere else in the sequence.
+* **Step 5**: Record the start and end indices of the answer, and finally "repair" the encoded sequence by switching the MASK token IDs out for the original answer token IDs.
+
+
 ## Sequence Length Distribution
 
 Part of tokenizing and encoding text for BERT is choosing a **maximum sequence length (max_len)** to pad or truncate all of the samples in the training set (87,599 samples). The BERT tokenizer.encode does the following steps,
@@ -97,29 +112,29 @@ There are several factors that impact our choice of the maximum sequence length 
 
 Ultimately, a maximum sequence length of `384` is used to match the length chosen by the huggingface implementation.
 
-## Dataset Sampling and validation
-
-This dataset already has a train / test split, but the training dataset has been further divided to use 98% for training and 2% for *validation*. The validation set is used to detect over-fitting during the training process. A subset of 50000 samples are used for training.
-
 ## Hyperparameters Used
 
 The model object handles the execution of a forward pass, and the calculation of gradients during training.The actual updates to the model's weights, however, are performed by an Optimizer object.It is given as  a reference to the model's parameters, as well as set some of the training hyperparameters.
 
 For the purposes of fine-tuning, the BERT authors recommend choosing from the following values:
 
-* Batch size: 16, 32
 * Learning rate (Adam): 5e-5, 3e-5, 2e-5
 * Number of epochs: 2, 3, 4 ("learning rate scheduler")
 
-In order to make more efficient use of the GPU's parallel processing capabilities, a batch size of 16 is used. The learning rate used is 2e-5 and number of epochs is 4.
+In order to make more efficient use of the GPU's parallel processing capabilities, a batch size of 12 is used. The learning rate used is 3e-5 and number of epochs is 2.
 
 ## Training and Validation
 
-The training process has **12252** steps with each epoch contributing to 3063 batches. The dataset was trained for 4 hours on GPU. Both the training and validation loss kept on decresing in the subsequent epochs. The follwowing table shows the loss in each epochs,
+This dataset already has a train / test split, but the training dataset has been further divided to use 98% for training and 2% for *validation*. The validation set is used to detect over-fitting during the training process.
 
+There are 7,105 training batches & 145 validation batches for 1 epoch.The dataset was trained for 3.5 hours on GPU.The follwowing table shows the loss in each epochs,
 
-
- The following is a graph comparing training and validation loss across all epochs,
+|-------|---------------|-----------------|---------------------|---------------|-----------------|
+| Epoch | Training Loss | Validation Loss |	Validation Accuracy | Training Time	| Validation Time |				
+|-------|---------------|-----------------|---------------------|---------------|-----------------|
+|  1	|    1.23	    |      0.92	      |         0.72	    |     1:47:19	|      0:00:45    |
+|  2	|    0.70       |	   0.93	      |         0.73	    |     1:47:18	|      0:00:45    |
+|-------|---------------|-----------------|---------------------|---------------|-----------------|
 
 ## Evaluation on test set
 
@@ -148,3 +163,43 @@ The test set contains 21140 samples.
 
 ## Final Results
 
+There are two standard approaches to scoring results on the SQuAD benchmark:
+
+1. Exact Match
+2. F1 Score
+
+**Exact Match**
+
+For this metric, the number of predicted start indices that are equal to the correct ones are added up. It is done for  the end indices as well, such that there are actually two "points" for every sample.
+
+To handle the 3 possible answers, we score our predictions against each of the answers separately, and select the  answer which best matches our prediction. So for each test sample, the highest possible score is 2. 
+
+**F1 Score**
+
+The F1 score gives our model credit for predicting a span which partially intersects the correct one.
+
+*Formula :* 
+```python
+    precision = 1.0 * num_same / len(pred_toks)
+    recall = 1.0 * num_same / len(gold_toks)
+    f1 = (2 * precision * recall) / (precision + recall)
+```
+
+To handle the 3 possible answers, F1 score for each sample is calculated separately and the one with the highest score is considered. 
+
+The final F1 score is determined by taking the average over all the test samples.
+
+**Final Score of our fine tuned BERT base model:**
+
+```
+Correctly predicted indices: 17,751 of 21,140 (83.97%)
+
+Average F1 Score: 0.863
+```
+
+## References
+
+1. https://datarepository.wolframcloud.com/resources/SQuAD-v1.1
+2. https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/blocks/bert-encoder
+3. https://rajpurkar.github.io/SQuAD-explorer/
+4. https://github.com/google-research/bert
