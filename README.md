@@ -1,8 +1,8 @@
 # BERT Questing Answering model on SQUAD dataset
 
-Link to view the notebook: [Github view](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/Question%20and%20Answering%20-%20BERT.ipynb)
+Link to view the notebook: [Github view](https://github.com/Sudhandar/BERT-Question-Answering/blob/master/BERT_Question_and_Answering.ipynb)
 
-Link to the Colab Notebook: [Colab Notebook](https://colab.research.google.com/drive/1uYtqckEAp6DwweZGw4VxyU9rvEax-A5y?authuser=1#scrollTo=Ff-eSxYL6hZC)
+Link to the Colab Notebook: [Colab Notebook](https://colab.research.google.com/drive/1uYtqckEAp6DwweZGw4VxyU9rvEax-A5y?authuser=1#scrollTo=0NmMdkZO8R6q)
 
 Fine tuning the BERT base-cased model to build a question and answering model,trained and tested on the SQuAD dataset.
 
